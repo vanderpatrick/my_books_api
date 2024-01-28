@@ -1,4 +1,6 @@
-from typing import Annotated, Union, List
+from typing import Annotated, Union, List, Tuple
+
+from sqlalchemy import and_
 from starlette import status
 from pydantic import BaseModel
 from database import engine, SessionLocal as DB
@@ -43,29 +45,32 @@ class BookResponse(BaseModel):
 # Get all author from database
 @router.get(
     "/all",
-    status_code=status.HTTP_302_FOUND,
-    response_model=List[BookResponse],
+    status_code=status.HTTP_200_OK,
+    # response_model=List[BookResponse],
 )
 async def get_all_books(db: Session = Depends(get_db)):
+    # Todo fix this shit im playing in a pewee like manner but that wont work, i have to read docs Fuck :(
     book = db.query(m.Book).filter().all()
-
+    print(book)
     if not book:
         raise HTTPException(status_code=404, detail="There are no books at the moment")
+    author = db.query(m.Author).filter().all()
+    data = [{"books": book, "author": author}]
+    # Convert the da,
+    # tabase results to the desired response format using the Pydantic model
+    # book_response = [
+    #     BookResponse(
+    #         id=record.id,
+    #         book_author_id=record.book_author_id,
+    #         book_index_by_author=record.book_index_by_author,
+    #         book_title=record.book_title,
+    #         created=record.created,
+    #         updated=record.updated if record.updated else "",
+    #     )
+    #     for record in book
+    # ]
 
-    # Convert the database results to the desired response format using the Pydantic model
-    book_response = [
-        BookResponse(
-            id=record.id,
-            book_author_id=record.book_author_id,
-            book_index_by_author=record.book_index_by_author,
-            book_title=record.book_title,
-            created=record.created,
-            updated=record.updated if record.updated else "",
-        )
-        for record in book
-    ]
-
-    return book_response
+    return data
 
 
 # create instance of author

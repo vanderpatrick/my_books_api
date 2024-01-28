@@ -41,7 +41,7 @@ class AuthorResponse(BaseModel):
 # Get all author from database
 @router.get(
     "/all",
-    status_code=status.HTTP_302_FOUND,
+    status_code=status.HTTP_200_OK,
     response_model=List[AuthorResponse],
 )
 async def get_all_author(db: Session = Depends(get_db)):
