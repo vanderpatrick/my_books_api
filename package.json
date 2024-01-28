@@ -1,0 +1,8 @@
+{
+  "name": "my_books",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/vanderpatrick/my_books_api",
+  "author": "Patrick van der Flier <patrick@corverdevelopment.nl>",
+  "license": "MIT"
+}
